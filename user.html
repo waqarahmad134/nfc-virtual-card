@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
+    <title>NFC</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="css/new.css" />
+    <!--<link rel="stylesheet" href="https://nfc.saudi360inc.com/css/new.css" />-->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
+    />
+    <!-- Latest compiled and minified CSS -->
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <style>
+      .hide {
+        display: none;
+      }
+
+      .show {
+        display: block;
+      }
+      .preloader {
+        height: 100vh;
+        width: 100vw;
+        background-color: white;
+        position: fixed;
+        top: 0;
+        z-index: 999;
+      }
+      #preloader_img {
+        -webkit-animation-name: spinner;
+        -webkit-animation-timing-function: linear;
+        -webkit-animation-iteration-count: infinite;
+        -webkit-animation-duration: 2s;
+        animation-name: spinner;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
+        animation-duration: 2s;
+        -webkit-transform-style: preserve-3d;
+        -moz-transform-style: preserve-3d;
+        -ms-transform-style: preserve-3d;
+        transform-style: preserve-3d;
+      }
+
+      /* WebKit and Opera browsers */
+      @-webkit-keyframes spinner {
+        from {
+          -webkit-transform: rotateY(0deg);
+        }
+        to {
+          -webkit-transform: rotateY(-360deg);
+        }
+      }
+      /* all other browsers */
+      @keyframes spinner {
+        from {
+          -moz-transform: rotateY(0deg);
+          -ms-transform: rotateY(0deg);
+          transform: rotateY(0deg);
+        }
+        to {
+          -moz-transform: rotateY(-360deg);
+          -ms-transform: rotateY(-360deg);
+          transform: rotateY(-360deg);
+        }
+      }
+    </style>
+  </head>
+
+  <body class="bg-default">
+    <div class="preloader">
+      <div
+        id="preloader_img"
+        class="h-100 d-flex justify-content-center align-items-center"
+      >
+        <img
+          class="img-fluid"
+          src="https://nfc.saudi360inc.com/wp-content/uploads/2021/01/SAUDI-NFC-GREEN-v3.png"
+          alt="preloader"
+          width="300"
+        />
+      </div>
+    </div>
+    <div class="container mt-3">
+      <h1>NFC USERS FIREBASE DATA</h1>
+      <table class="table table-responsive table-dark">
+        <thead>
+          <th>No.</th>
+          <th>User ID</th>
+          <th>Co. Name</th>
+          <th>Email</th>
+          <th>First Name</th>
+          <th>Last Name</th>
+          <th>Mobile</th>
+          <th>Position</th>
+          <th>Location</th>
+          <th>Profile Image</th>
+          <th>View Profile</th>
+        </thead>
+        <tbody id="tbody1"></tbody>
+      </table>
+    </div>
+    <div class="main-content hide" id="boxes">
+      <div class="header bg-gradient-primary py-7 py-lg-8 pt-lg-9">
+        <div class="separator separator-bottom separator-skew zindex-100">
+          <svg
+            x="0"
+            y="0"
+            viewBox="0 0 2560 100"
+            preserveAspectRatio="none"
+            version="1.1"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <polygon
+              class="fill-default"
+              points="2560 0 2560 100 0 100"
+            ></polygon>
+          </svg>
+        </div>
+      </div>
+      <div class="container mt--9">
+        <!--share screen modal start-->
+        <div
+          class="modal fade qr-modal in"
+          id="modalForShareCard"
+          role="dialog"
+          style="opacity: 1"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header border-0">
+                <div
+                  class="modal-custom-header d-flex align-items-center justify-content-between w-100"
+                >
+                  <button
+                    type="button"
+                    class="back-btn d-flex align-items-center justify-content-center"
+                    data-dismiss="modal"
+                  >
+                    <img
+                      src="assets/arrow-back.svg"
+                      alt="back"
+                      class="img-fluid"
+                    />
+                  </button>
+                  <h4 class="modal-title">Share this card</h4>
+                  <button type="button" class="logout-btn" data-dismiss="modal">
+                    <img
+                      src="assets/signout.svg"
+                      alt="signout"
+                      class="img-fluid signout"
+                    />
+                  </button>
+                </div>
+              </div>
+              <div class="modal-body border-0">
+                <div class="modal-body-section text-center">
+                  <div class="qr-main-image qr_image">
+                    <div class="qr-code-border"></div>
+                    <div class="qrcode">
+                      <img src="" id="qrcode_model" />
+                    </div>
+                  </div>
+
+                  <div class="text">
+                    <p>Point your camera at the QR code, or visit</p>
+                    <p
+                      id="profile-url"
+                      class="qr-link text-center mr-2 slug_url"
+                    ></p>
+                  </div>
+                  <div class="share-card-btn">
+                    <button
+                      type="button"
+                      class="share-card-btn-main"
+                      id="share_button"
+                    >
+                      <img
+                        src="assets/signout.svg"
+                        alt="signout"
+                        class="img-fluid"
+                      />
+                      <h5 class="share-card">Share contact card</h5>
+                    </button>
+                  </div>
+
+                  <!-- AddThis Button BEGIN -->
+                  <div
+                    class="addthis_toolbox addthis_default_style addthis_32x32_style"
+                    id="add_this"
+                    style="display: none"
+                  >
+                    <div
+                      class="addthis_inline_share_toolbox"
+                      data-title=""
+                      data-description=""
+                      data-url="#"
+                      style="clear: both"
+                    >
+                      <div
+                        id="atstbx"
+                        class="at-resp-share-element at-style-responsive addthis-smartlayers addthis-animated at4-show"
+                        aria-labelledby="at-36ef60c5-25b4-4951-86e0-4ee745101e74"
+                        role="region"
+                      >
+                        <span
+                          id="at-36ef60c5-25b4-4951-86e0-4ee745101e74"
+                          class="at4-visually-hidden"
+                          >AddThis Sharing Buttons</span
+                        >
+                        <div class="at-share-btn-elements">
+                          <a
+                            id="fb-share"
+                            target=""
+                            href="#"
+                            role="button"
+                            tabindex="0"
+                            class="at-icon-wrapper at-share-btn at-svc-facebook"
+                            style="
+                              background-color: rgb(59, 89, 152);
+                              border-radius: 0px;
+                            "
+                            ><span class="at4-visually-hidden"
+                              >Share to Facebook</span
+                            ><span
+                              class="at-icon-wrapper"
+                              style="
+                                line-height: 32px;
+                                height: 32px;
+                                width: 32px;
+                              "
+                              ><svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                viewBox="0 0 32 32"
+                                version="1.1"
+                                role="img"
+                                aria-labelledby="at-svg-facebook-1"
+                                class="at-icon at-icon-facebook"
+                                style="
+                                  fill: rgb(255, 255, 255);
+                                  width: 32px;
+                                  height: 32px;
+                                "
+                              >
+                                <title id="at-svg-facebook-1">Facebook</title>
+                                <g>
+                                  <path
+                                    d="M22 5.16c-.406-.054-1.806-.16-3.43-.16-3.4 0-5.733 1.825-5.733 5.17v2.882H9v3.913h3.837V27h4.604V16.965h3.823l.587-3.913h-4.41v-2.5c0-1.123.347-1.903 2.198-1.903H22V5.16z"
+                                    fill-rule="evenodd"
+                                  ></path>
+                                </g></svg></span
+                            ><span
+                              class="at-label"
+                              style="
+                                font-size: 11.4px;
+                                line-height: 32px;
+                                height: 32px;
+                                color: rgb(255, 255, 255);
+                              "
+                              >Facebook</span
+                            ></a
+                          ><!--<div class="fb-share-button" data-href="https://nfc.saudi360inc.com/user.html#user-8cba" data-layout="button" data-size="small"><a id="fb-link" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fnfc.saudi360inc.com%2Fuser.html%23user-8cba&amp;src=sdkpreparse" class="fb-xfbml-parse-ignore">Share</a></div>--><a
+                            id="whatsapp-share"
+                            target="_blank"
+                            href=""
+                            role="button"
+                            tabindex="0"
+                            class="at-icon-wrapper at-share-btn at-svc-whatsapp"
+                            style="
+                              background-color: rgb(77, 194, 71);
+                              border-radius: 0px;
+                            "
+                            ><span class="at4-visually-hidden"
+                              >Share to WhatsApp</span
+                            ><span
+                              class="at-icon-wrapper"
+                              style="
+                                line-height: 32px;
+                                height: 32px;
+                                width: 32px;
+                              "
+                              ><svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                viewBox="0 0 32 32"
+                                version="1.1"
+                                role="img"
+                                aria-labelledby="at-svg-whatsapp-2"
+                                class="at-icon at-icon-whatsapp"
+                                style="
+                                  fill: rgb(255, 255, 255);
+                                  width: 32px;
+                                  height: 32px;
+                                "
+                              >
+                                <title id="at-svg-whatsapp-2">WhatsApp</title>
+                                <g>
+                                  <path
+                                    d="M19.11 17.205c-.372 0-1.088 1.39-1.518 1.39a.63.63 0 0 1-.315-.1c-.802-.402-1.504-.817-2.163-1.447-.545-.516-1.146-1.29-1.46-1.963a.426.426 0 0 1-.073-.215c0-.33.99-.945.99-1.49 0-.143-.73-2.09-.832-2.335-.143-.372-.214-.487-.6-.487-.187 0-.36-.043-.53-.043-.302 0-.53.115-.746.315-.688.645-1.032 1.318-1.06 2.264v.114c-.015.99.472 1.977 1.017 2.78 1.23 1.82 2.506 3.41 4.554 4.34.616.287 2.035.888 2.722.888.817 0 2.15-.515 2.478-1.318.13-.33.244-.73.244-1.088 0-.058 0-.144-.03-.215-.1-.172-2.434-1.39-2.678-1.39zm-2.908 7.593c-1.747 0-3.48-.53-4.942-1.49L7.793 24.41l1.132-3.337a8.955 8.955 0 0 1-1.72-5.272c0-4.955 4.04-8.995 8.997-8.995S25.2 10.845 25.2 15.8c0 4.958-4.04 8.998-8.998 8.998zm0-19.798c-5.96 0-10.8 4.842-10.8 10.8 0 1.964.53 3.898 1.546 5.574L5 27.176l5.974-1.92a10.807 10.807 0 0 0 16.03-9.455c0-5.958-4.842-10.8-10.802-10.8z"
+                                    fill-rule="evenodd"
+                                  ></path>
+                                </g></svg></span
+                            ><span
+                              class="at-label"
+                              style="
+                                font-size: 11.4px;
+                                line-height: 32px;
+                                height: 32px;
+                                color: rgb(255, 255, 255);
+                              "
+                              >WhatsApp</span
+                            ></a
+                          ><a
+                            id="share-email"
+                            href="#"
+                            role="button"
+                            tabindex="0"
+                            class="at-icon-wrapper at-share-btn at-svc-email"
+                            style="
+                              background-color: rgb(132, 132, 132);
+                              border-radius: 0px;
+                            "
+                            ><span class="at4-visually-hidden"
+                              >Share to Email</span
+                            ><span
+                              class="at-icon-wrapper"
+                              style="
+                                line-height: 32px;
+                                height: 32px;
+                                width: 32px;
+                              "
+                              ><svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                xmlns:xlink="http://www.w3.org/1999/xlink"
+                                viewBox="0 0 32 32"
+                                version="1.1"
+                                role="img"
+                                aria-labelledby="at-svg-email-3"
+                                class="at-icon at-icon-email"
+                                style="
+                                  fill: rgb(255, 255, 255);
+                                  width: 32px;
+                                  height: 32px;
+                                "
+                              >
+                                <title id="at-svg-email-3">Email</title>
+                                <g>
+                                  <g fill-rule="evenodd"></g>
+                                  <path
+                                    d="M27 22.757c0 1.24-.988 2.243-2.19 2.243H7.19C5.98 25 5 23.994 5 22.757V13.67c0-.556.39-.773.855-.496l8.78 5.238c.782.467 1.95.467 2.73 0l8.78-5.238c.472-.28.855-.063.855.495v9.087z"
+                                  ></path>
+                                  <path
+                                    d="M27 9.243C27 8.006 26.02 7 24.81 7H7.19C5.988 7 5 8.004 5 9.243v.465c0 .554.385 1.232.857 1.514l9.61 5.733c.267.16.8.16 1.067 0l9.61-5.733c.473-.283.856-.96.856-1.514v-.465z"
+                                  ></path>
+                                </g></svg></span
+                            ><span
+                              class="at-label"
+                              style="
+                                font-size: 11.4px;
+                                line-height: 32px;
+                                height: 32px;
+                                color: rgb(255, 255, 255);
+                              "
+                              >Email</span
+                            ></a
+                          >
+                        </div>
+                      </div>
+                    </div>
+                    <div class="atclear"></div>
+                  </div>
+
+                  <div class="text">
+                    <p class="mb-3 channels social-div">
+                      Or check my social channels
+                    </p>
+                  </div>
+                  <div
+                    class="social-icon-section modal-social-icon-section social-div"
+                  >
+                    <div
+                      class="text-center social-icon card-business-hours pb-20"
+                    >
+                      <div class="container-lg">
+                        <div class="row justify-content-center icon_rearrange">
+                          <div
+                            class="col-1 socials_1 social_icons"
+                            id="socials_1"
+                          >
+                            <div class="image-icon social_img snap_icon">
+                              <a
+                                id="share-facebook"
+                                href="https://facebook.com"
+                                target="_blank"
+                              >
+                                <img
+                                  src="assets/facebook.svg"
+                                  alt="Facebook"
+                                  class="img-fluid"
+                                />
+                              </a>
+                            </div>
+                          </div>
+                          <div
+                            class="col-1 socials_1 social_icons"
+                            id="socials_4"
+                          >
+                            <div class="image-icon social_img snap_icon">
+                              <a
+                                id="share-twitter"
+                                href="https://twitter.com"
+                                target="_blank"
+                              >
+                                <i class="fa fa-twitter"></i>
+                              </a>
+                            </div>
+                          </div>
+                          <div
+                            class="col-1 socials_2 social_icons"
+                            id="socials_2"
+                          >
+                            <div class="image-icon social_img snap_icon">
+                              <a
+                                id="share-instagram"
+                                href="https://www.instagram.com/"
+                                target="_blank"
+                              >
+                                <img
+                                  src="assets/instagram.svg"
+                                  alt="Instagram"
+                                  class="img-fluid"
+                                />
+                              </a>
+                            </div>
+                          </div>
+                          <div
+                            class="col-1 socials_3 social_icons"
+                            id="socials_3"
+                          >
+                            <div class="image-icon social_img snap_icon">
+                              <a
+                                id="share-linkedin"
+                                href="https://www.linkedin.com/"
+                                target="_blank"
+                              >
+                                <img
+                                  src="assets/linkedin.svg"
+                                  alt="LinkedIn"
+                                  class="img-fluid"
+                                />
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--share screen modal end-->
+        <div class="row">
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"></div>
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4">
+            <div class="card">
+              <div class="flip-box">
+                <div class="flip-box-inner">
+                  <div class="flip-box-front">
+                    <img
+                      class="card-img-top"
+                      src=""
+                      alt="front-img"
+                      id="theCoverImage"
+                    />
+                  </div>
+                  <div class="flip-box-back">
+                    <div class="qr-main-image">
+                      <div class="qr-code-border"></div>
+                      <div class="qrcode">
+                        <div id="qrcode"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card-body text-center">
+                <img
+                  class="img-fluid avatar rounded-circle"
+                  src="assets/logo.jpg"
+                  alt="Bologna"
+                  id="avatar"
+                />
+                <p class="d-none" id="avatar_url"></p>
+                <h5 class="h3 theme1_title" id="Dname">
+                  <img src="assets/pre-loader.gif" />
+                </h5>
+              
+                <div class="d-none" id="firstName"></div>
+                <div class="d-none" id="lastName"></div>
+                <h5 class="h4 theme1_desc mb-3">
+                  <span class="post" id="Dposition"> </span>
+                </h5>
+                <div class="text-left">
+                  <div class="h5 mt-1">
+                    <span class="ícon-left">
+                        <i class="fa fa-briefcase"></i>
+                    </span>
+                    <span class="inc right-part" id="Dcompany" </span>
+                    <hr class="mt-1 mb-1" />
+                  </div>
+                  <div class="h5 mt-1">
+                    <span class="ícon-left"
+                      ><i class="fa fa-phone fa-flip-horizontal"></i
+                    ></span>
+                    <span class="right-part">
+                      <a href="#" class="contact_section" id="Dmobile">
+                      </a>
+                    </span>
+                    <hr class="mt-1 mb-1" />
+                  </div>
+
+                  <!--Telephone Number-->
+                  <div class="h5 mt-1">
+                    <span class="ícon-left"
+                      ><i class="fa fa-phone fa-flip-horizontal"></i
+                    ></span>
+                    <span class="right-part">
+                      <a href="#" class="contact_section" id="Dmobile2">
+                      </a>
+                    </span>
+                    <hr class="mt-1 mb-1" />
+                  </div>
+                  <div class="h5 mt-1">
+                    <span class="address-icon-part ícon-left">
+                      <i class="fa fa-map-marker"></i>
+                    </span>
+                    <span class="address-text right-part">
+                      <a
+                        href="#"
+                        target="_blank"
+                        class="contact_section"
+                        id="Dlocation"
+                        style="pointer-events: none"
+                      >
+                      </a>
+                    </span>
+                    <hr class="mt-1 mb-1" />
+                  </div>
+                  <div class="h5 mt-1">
+                    <span class="ícon-left"><i class="fa fa-globe"></i></span>
+                    <span class="right-part"
+                      ><a
+                        class="contact_section"
+                        target="_blank"
+                        href="#"
+                        id="Dwebsite"
+                      >
+                      </a></span
+                    >
+                    <hr class="mt-1 mb-1" />
+                  </div>
+                  <div class="h5 mt-1">
+                    <span class="ícon-left"
+                      ><i class="fa fa-envelope"></i
+                    ></span>
+                    <span class="right-part">
+                      <a class="email contact_section" href="#" id="Demail">
+                      </a></span
+                    >
+                    <hr class="mt-1 mb-1" />
+                  </div>
+                </div>
+                <!-- Share card starts -->
+
+                <div class="save_card_div_section share-contact-btn">
+                  <a
+                    href=""
+                    data-toggle="modal"
+                    data-target="#modalForShareCard"
+                    style="display: block; text-align: center"
+                    class="contact_section"
+                    >Share card
+                    <img
+                      id="share"
+                      src="assets/share_variant.svg"
+                      alt="share"
+                      class="img-fluid share_contact_black_icon"
+                    />
+                  </a>
+                </div>
+                  <h5 class="d-none" id="Dtwitter"></h5>
+                <!-- Share card ends -->
+                <div class="social_media text-center">
+                  <span>
+                    <a id="socialfb" class="facebook" target="_blank" href=""
+                      ><i class="fa fa-facebook-f"></i
+                    ></a>
+                  </span>
+                  <span>
+                    <a id="socialtwitter" class="twitter" target="_blank" href="#"
+                      ><i class="fa fa-twitter"></i
+                    ></a>
+                  </span>
+                  <span>
+                    <a
+                      id="socialinsta"
+                      class="instagram"
+                      target="_blank"
+                      href="#"
+                      ><i class="fa fa-instagram"></i
+                    ></a>
+                  </span>
+                  <span>
+                    <a
+                      id="sociallinkedin"
+                      class="linkedin"
+                      target="_blank"
+                      href="#"
+                    >
+                      <i class="fa fa-linkedin"></i
+                    ></a>
+                  </span>
+                </div>
+              </div>
+              <div class="note" id="note"></div>
+              <div class="add-contact-btn">
+                <a
+                  onclick="saveContact()"
+                  class="add_to_contact_button text-white"
+                  id="addtocontact"
+                  style="cursor: pointer"
+                  >ADD TO CONTACT</a
+                >
+              </div>
+            </div>
+            <p
+              class="col-xs-12 center-block text-white text-center copy-text-footer"
+              style="font-size: 12px"
+            >
+              Powered by
+              <a
+                class="text-light"
+                href="https://saudi360inc.com/"
+                target="_blank"
+                >saudi360inc.com</a
+              >
+            </p>
+          </div>
+          <div class="col-xs-12 col-sm-12 col-md-12 col-lg-4"></div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      var firstname = "";
+      var lastname = "";
+      var email = "";
+      var mobile = "";
+      var tel = "";
+      var position = "";
+      var location = "";
+      var company = "";
+      var website = "";
+      var fb = "";
+      var insta = "";
+      var linkedin = "";
+      var Ufid = "";
+      var company = "";
+      var Email = "";
+      var Fname = "";
+      var Lname = "";
+      var Mobile = "";
+      var Position = "";
+      var Location = "";
+      var stdNo = 0;
+      var tbody = document.getElementById("tbody1");
+
+      function AddItemToTable(
+        userID,
+        cname,
+        email,
+        fname,
+        lname,
+        mobile,
+        telephone,
+        position,
+        location,
+        profileImage,
+        image
+      ) {
+        //ibrahim added image
+        let trow = document.createElement("tr");
+        let td1 = document.createElement("td");
+        let td2 = document.createElement("td");
+        let td3 = document.createElement("td");
+        let td4 = document.createElement("td");
+        let td5 = document.createElement("td");
+        let td6 = document.createElement("td");
+        let td7 = document.createElement("td");
+        let td8 = document.createElement("td");
+        let td9 = document.createElement("td");
+        let td10 = document.createElement("td");
+        let td11 = document.createElement("td");
+
+        var mark =
+          "<img src= " +
+          image +
+          profileImage +
+          ' alt="" height=100 width=100 />'; //ibrahim added image
+        var btn =
+          '<button class="btn btn-success V-profile" data-value="' +
+          userID +
+          '" type="button">View Profile</button>';
+
+        td1.innerHTML = ++stdNo;
+        td2.innerHTML = userID;
+        td3.innerHTML = cname;
+        td4.innerHTML = email;
+        td5.innerHTML = fname;
+        td6.innerHTML = lname;
+        td7.innerHTML = mobile;
+        td8.innerHTML = position;
+        td9.innerHTML = location;
+        td10.innerHTML = mark;
+        td11.innerHTML = btn;
+
+        trow.appendChild(td1);
+        trow.appendChild(td2);
+        trow.appendChild(td3);
+        trow.appendChild(td4);
+        trow.appendChild(td5);
+        trow.appendChild(td6);
+        trow.appendChild(td7);
+        trow.appendChild(td8);
+        trow.appendChild(td9);
+        trow.appendChild(td10);
+        trow.appendChild(td11);
+        tbody.appendChild(trow);
+      }
+
+      function AddAllItemsToTable(TheStudent) {
+        stdNo = 0;
+        tbody.innerHTML = "";
+        TheStudent.forEach((element) => {
+          AddItemToTable(
+            element.userID,
+            element.comName,
+            element.emailCom,
+            element.fName,
+            element.lName,
+            element.mobile,
+            element.position,
+            element.location,
+            element.profileImage,
+            element.image
+          ); //ibrahim added image
+        });
+      }
+
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
+
+      // Your web app's Firebase configuration
+      // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+      const firebaseConfig = {
+        apiKey: "AIzaSyBHE00yT5BXSSdETAyVA0OSxiih3IlODoc",
+        authDomain: "nfcsaudi360.firebaseapp.com",
+        databaseURL: "https://nfcsaudi360-default-rtdb.firebaseio.com",
+        projectId: "nfcsaudi360",
+        storageBucket: "nfcsaudi360.appspot.com",
+        messagingSenderId: "299813653483",
+        appId: "1:299813653483:web:b5655e9a856a4f0958a7ae",
+        measurementId: "G-YMCEF40YMK",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        getDocs,
+        where,
+        query,
+        onSnapshot,
+        collection,
+      } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+      const db = getFirestore();
+
+      // Get All Data
+
+      async function GetAllDataOnce() {
+        const querySnapshot = await getDocs(collection(db, "usersData"));
+
+        var students = [];
+
+        querySnapshot.forEach((doc) => {
+          students.push(doc.data());
+        });
+
+        AddAllItemsToTable(students);
+
+        $("button.V-profile").on("click", async function () {
+          var value = $(this).data("value");
+
+          console.log("value " + value);
+          window.location.hash = "user-" + value;
+          $("#boxes").removeClass("hide");
+          $(".mt-3").addClass("hide");
+          const docRef = doc(db, "usersData", "O22TwScJjJAAPba10EVQ");
+          const docSnap = await getDoc(docRef);
+          console.log(docSnap.data());
+          try {
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+              console.log(docSnap.data());
+            } else {
+              console.log("Document does not exist");
+            }
+          } catch (error) {
+            console.log(error);
+          }
+
+          const q = query(
+            collection(db, "usersData"),
+            where("userID", "==", value)
+          );
+
+          const querySnapshot = await getDocs(q);
+          querySnapshot.forEach((doc) => {
+            var sortD = doc.data();
+            var gid = sortD.userID;
+            var gfname = sortD.fName;
+            var glname = sortD.lName;
+            var gemail = sortD.emailCom;
+            var gcompany = sortD.comName;
+            var gmobile = sortD.mobile;
+            var gtel = sortD.telephone;
+            var gposition = sortD.position;
+            var glocation = sortD.location;
+            var gimage = sortD.profileImage;
+            var coverImage = sortD.image; //ibrahim added a line
+            var gwebsite = sortD.websiteLink;
+            var gfb = sortD.fb;
+            var gtwitter = sortD.twitter;
+            var glinkedin = sortD.linkedIn;
+            var ginsta = sortD.insta;
+            var note = sortD.insta;
+            alert(note);
+
+            firstname = gfname;
+            lastname = glname;
+            email = gemail;
+            
+            mobile = gmobile;
+            tel = gtel;
+            position = gposition;
+            location = glocation;
+            company = gcompany;
+            website = gwebsite;
+            fb = gfb;
+            linkedin = glinkedin;
+            insta = ginsta;
+            document.getElementById("theCoverImage").src = coverImage; //ibrahim added a line
+            document.getElementById("avatar").src = gimage;
+            document.getElementById("Dname").innerHTML =
+              firstname + " " + lastname;
+
+            document.getElementById("note").innerHTML = note;
+            document.getElementById("Demail").innerHTML = gemail;
+            document.getElementById("Demail").href = "mailto:" + gemail;
+            /*document.getElementById("share-email").href = "mailto:"+gemail;*/
+            document.getElementById("Dcompany").innerHTML = gcompany;
+            document.getElementById("Dmobile").innerHTML = gmobile;
+            document.getElementById("Dmobile").href = "tel:" + gmobile;
+            document.getElementById("Dmobile2").innerHTML = gtel;
+            document.getElementById("Dmobile2").href = "tel:" + gtel;
+            document.getElementById("Dposition").innerHTML = gposition;
+            document.getElementById("Dtwitter").innerHTML = gtwitter;
+            document.getElementById("Dlocation").innerHTML = glocation;
+            document.getElementById("Dwebsite").innerHTML = gwebsite;
+            if (gwebsite == "") {
+              var web = document.getElementById("Dwebsite");
+              web.setAttribute("href", window.location.hash);
+            } else {
+              var web = document.getElementById("Dwebsite");
+              web.setAttribute("href", "https://" + gwebsite);
+            }
+
+            if (gfb == "") {
+            //   document.getElementById("socialfb").href = window.location.hash;
+              document.getElementById("share-facebook").href =
+                window.location.hash;
+                $('#socialfb').addClass("d-none");
+                $('#socials_1').addClass("d-none");
+            } else {
+              document.getElementById("socialfb").href = gfb;
+              document.getElementById("share-facebook").href = gfb;
+            }
+            if (ginsta == "") {
+              document.getElementById("socialinsta").href =
+                window.location.hash;
+              document.getElementById("share-instagram").href =
+                window.location.hash;
+                $('#socialinsta').addClass("d-none");
+              $('#socials_2').addClass("d-none");
+            } else {
+              document.getElementById("socialinsta").href = ginsta;
+              document.getElementById("share-instagram").href = ginsta;
+            }
+            if (glinkedin == "") {
+              document.getElementById("sociallinkedin").href =
+                window.location.hash;
+              document.getElementById("share-linkedin").href =
+                window.location.hash;
+                $('#sociallinkedin').addClass("d-none");
+              $('#socials_3').addClass("d-none");
+            } else {
+              document.getElementById("sociallinkedin").href = glinkedin;
+              document.getElementById("share-linkedin").href = glinkedin;
+            }
+
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data(), "user id", gid);
+            console.log(
+              firstname,
+              lastname,
+              email,
+              company,
+              mobile,
+              position,
+              location
+            );
+          });
+        });
+      }
+
+      if (window.location.hash) {
+        var user = window.location.hash.split("-")[1];
+        $("#boxes").removeClass("hide");
+        $(".mt-3").addClass("hide");
+        const docRef = doc(db, "usersData", "O22TwScJjJAAPba10EVQ");
+        const docSnap = await getDoc(docRef);
+        console.log(docSnap.data());
+        try {
+          const docSnap = await getDoc(docRef);
+          if (docSnap.exists()) {
+            console.log(docSnap.data());
+          } else {
+            console.log("Document does not exist");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+
+        const q = query(
+          collection(db, "usersData"),
+          where("userID", "==", user)
+        );
+
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          var sortD = doc.data();
+          var gid = sortD.userID;
+          var ufid = sortD.userID;
+          var gfname = sortD.fName;
+          var glname = sortD.lName;
+          var gemail = sortD.emailCom;
+          var gcompany = sortD.comName;
+          var gmobile = sortD.mobile;
+          var gtel = sortD.telephone;
+          var gposition = sortD.position;
+          var glocation = sortD.location;
+          var gimage = sortD.profileImage;
+          var coverImage = sortD.image; //ibrahim added a line
+          var gwebsite = sortD.websiteLink;
+          var gfb = sortD.fb;
+           var gtwitter = sortD.twitter;
+          var glinkedin = sortD.linkedIn;
+          var ginsta = sortD.insta;
+
+          firstname = gfname;
+          lastname = glname;
+          email = gemail;
+          mobile = gmobile;
+          tel = gtel;
+          position = gposition;
+          location = glocation;
+          company = gcompany;
+          website = gwebsite;
+          fb = gfb;
+          linkedin = glinkedin;
+          insta = ginsta;
+          document.getElementById("theCoverImage").src = coverImage; //ibrahim added a line
+          document.getElementById("avatar").src = gimage;
+          document.getElementById("avatar_url").innerHTML = gimage;
+          document.getElementById("Dname").innerHTML =
+            firstname + " " + lastname;
+          document.getElementById("firstName").innerHTML = firstname;
+          document.getElementById("lastName").innerHTML = lastname;
+          document.getElementById("Demail").innerHTML = gemail;
+          document.getElementById("Dtwitter").innerHTML = gtwitter;
+          document.getElementById("Demail").href = "mailto:" + gemail;
+          /*  document.getElementById("share-email").href = "mailto:"+gemail;*/
+          document.getElementById("Dcompany").innerHTML = gcompany;
+          document.getElementById("Dmobile").innerHTML = gmobile;
+          document.getElementById("Dmobile").href = "tel:" + gmobile;
+          document.getElementById("Dmobile2").innerHTML = gtel;
+          document.getElementById("Dmobile2").href = "tel:" + gtel;
+          document.getElementById("Dposition").innerHTML = gposition;
+          document.getElementById("Dlocation").innerHTML = glocation;
+          document.getElementById("Dwebsite").innerHTML = gwebsite;
+          document.getElementById("Dwebsite").href = gwebsite;
+          // document.getElementById("fbLink").href = gfb;
+          // document.getElementById("instaLink").href = ginsta;
+          // document.getElementById("linkedinLink").href = glinkedin;
+
+          if (gwebsite == "") {
+            var web = document.getElementById("Dwebsite");
+            web.setAttribute("href", window.location.hash);
+          } else {
+            var web = document.getElementById("Dwebsite");
+            web.setAttribute("href", "https://" + gwebsite);
+          }
+          if (gfb == "") {
+            // document.getElementById("socialfb").href = window.location.hash;
+            document.getElementById("share-facebook").href =
+              window.location.hash;
+              $('#socialfb').addClass("d-none");
+              $('#socials_1').addClass("d-none");
+          } else {
+            document.getElementById("socialfb").href = gfb;
+            document.getElementById("share-facebook").href = gfb;
+          }
+          if (gtwitter == "") {
+            document.getElementById("socialtwitter").href = window.location.hash;
+            document.getElementById("share-twitter").href =
+              window.location.hash;
+              $('#socialtwitter').addClass("d-none");
+              $('#socials_4').addClass("d-none");
+          } else {
+            document.getElementById("socialtwitter").href = gtwitter;
+            document.getElementById("share-twitter").href = gtwitter;
+          }
+          if (ginsta == "") {
+            document.getElementById("socialinsta").href = window.location.hash;
+            document.getElementById("share-instagram").href =
+              window.location.hash;
+              $('#socialinsta').addClass("d-none");
+              $('#socials_2').addClass("d-none");
+          } else {
+            document.getElementById("socialinsta").href = ginsta;
+            document.getElementById("share-instagram").href = ginsta;
+          }
+          if (glinkedin == "") {
+            document.getElementById("sociallinkedin").href =
+              window.location.hash;
+            document.getElementById("share-linkedin").href =
+              window.location.hash;
+              $('#sociallinkedin').addClass("d-none");
+              $('#socials_3').addClass("d-none");
+          } else {
+            document.getElementById("sociallinkedin").href = glinkedin;
+            document.getElementById("share-linkedin").href = glinkedin;
+          }
+
+          // doc.data() is never undefined for query doc snapshots
+          console.log(doc.id, " => ", doc.data(), "user id", gid);
+          console.log(
+            firstname,
+            lastname,
+            email,
+            company,
+            mobile,
+            position,
+            location
+          );
+        });
+      } else {
+        window.onload = GetAllDataOnce;
+      }
+      /*whatsapp share button script*/
+      $(".share-contact-btn").on("click", function () {
+        var iid = window.location.hash.split("-")[1];
+
+        var profileLnk = "https%3A%2F%2Fnfc.saudi360inc.com%2Fuser.html%23";
+        var newLink = profileLnk + "user-" + iid;
+        console.log(Ufid);
+        var Wlink = "https://api.whatsapp.com/send?text=";
+        var finallink = Wlink + newLink;
+        document.getElementById("profile-url").innerHTML = window.location.href;
+        document.getElementById("whatsapp-share").href = finallink;
+      });
+      /*whatsapp share button script*/
+
+      /*fb share button script*/
+      $("#fb-share").on("click", function () {
+        var fid = window.location.hash.split("-")[1];
+        var fblink = "https%3A%2F%2Fnfc.saudi360inc.com%2Fuser.html%23";
+        var fblinkFinal = fblink + "user-" + fid;
+        const navUrl =
+          "https://www.facebook.com/sharer/sharer.php?u=" + fblinkFinal;
+        window.open(navUrl, "_blank");
+      });
+
+      /*fb share button script*/
+
+      /*email share button script*/
+      $("#share-email").on("click", function () {
+        var mailtext = "mailto:?subject=";
+        var subject = "360inc.com";
+        var bodytext = "&body=";
+        var body = window.location.href;
+
+        var finalmail = mailtext + subject + bodytext + body;
+        document.getElementById("share-email").href = finalmail;
+      });
+
+      /*email share button script*/
+    </script>
+
+    <!-- QR modal share button toggle -->
+    <script type="text/javascript">
+      $("#share_button").click(function () {
+        $("#add_this").toggle("hide");
+      });
+    </script>
+
+    <!-- Hover effect on click event in mobile view starts..!!-->
+    <script type="text/javascript">
+      if (window.matchMedia("(max-width: 768px)").matches) {
+        $(".flip-box").addClass("hover");
+      } else {
+        $(".flip-box").removeClass("hover");
+      }
+
+      $(document).click(function () {
+        var container = $(".flip-box");
+        if (
+          !container.is(event.target) &&
+          !container.has(event.target).length
+        ) {
+          if (window.matchMedia("(max-width: 768px)").matches) {
+            if (!container.hasClass("hover")) {
+              container.addClass("hover");
+            }
+          }
+        }
+      });
+
+      $(document).on("click", ".flip-box", function () {
+        if (window.matchMedia("(max-width: 768px)").matches) {
+          $(this).toggleClass("hover");
+        }
+      });
+    </script>
+
+    <!-- Waqar JS Start Here -->
+    <script>
+    
+//  function getimg_convertbinary64(){
+//      fetch('https://firebasestorage.googleapis.com/v0/b/nfcsaudi360.appspot.com/o/38c5cover?alt=media&token=eab32b9f-7249-4490-842e-868e7fecb5d1', {
+//   method: 'GET'
+// })
+//   .then(response => response.arrayBuffer())
+//   .then(arrayBuffer => {
+//     const base64Data = btoa(
+//       String.fromCharCode(...new Uint8Array(arrayBuffer))
+//     );
+//     console.log("Success:", `${base64Data}`);
+//   })
+//   .catch(error => {
+//     console.error("Error fetching image:", error);
+//   });
+//  }
+//  }
+
+
+      $(document).ready(function () {
+        // redirect main page of subdomain to main site so that user can't see details of others
+        if (window.location.href === "https://nfc.saudi360inc.com/user.html") {
+          window.location.replace("https://nfc.saudi360inc.com/");
+        }
+
+        // QR-Code of Model
+        var qrcode_model = document.querySelectorAll("#qrcode img")[0].src;
+        document.getElementById("qrcode_model").src = qrcode_model;
+
+        // Preloader Hide
+        setTimeout(() => {
+          $(".preloader").addClass("d-none");
+        }, 2000);
+      });
+    </script>
+
+    <!-- Waqar Code for QR-Code Generation of Current URL  -->
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <script>
+      currentURL = window.location.href;
+      const qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: currentURL,
+        width: 90,
+        height: 90,
+        colorDark: "#000",
+        colorLight: "#fff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+    </script>
+
+    <!-- Waqar Code for Vcard Download  -->
+    <script>
+      function saveContact() {
+        // Get the values from the form inputs
+        var fullName = $("#Dname").text();
+        var firstName = $("#firstName").text();
+        var lastName = $("#lastName").text();
+        var email = $("#Demail").text();
+        var phone = $("#Dmobile").text();
+        var phone2 = $("#Dmobile2").text();
+        var website = $("#Dwebsite").text();
+        var address = $("#Dlocation").text();
+        var company = $("#Dcompany").text();
+        var position = $("#Dposition").text();
+        var note = $("#note").text();
+        var avatar_url = $("#avatar_url").text();
+        var twitterLink = $("#Dtwitter").text();
+        var fbLink = $("#socialfb").attr("href");
+        var instaLink = $("#socialinsta").attr("href");
+        var linkedinLink = $("#sociallinkedin").attr("href");
+
+       
+        // fetch("https://nfc.saudi360inc.com/avatar.jpg")    static avatar url
+        fetch(avatar_url)
+          .then((response) => response.arrayBuffer())
+          .then((buffer) => {
+            const base64Data = btoa(
+              String.fromCharCode(...new Uint8Array(buffer))
+            );
+            console.log("Sucess:", `${base64Data}`);
+
+            // Build the VCard text
+            var vcard = "BEGIN:VCARD\n";
+            vcard += "VERSION:2.1\n";
+            // vcard += "N:" + fullName + "\n";
+            vcard += "N:" + lastName + ";" + firstName + ";;;\n"; // separate the first name and last name with a semicolon
+            vcard += "PHOTO;TYPE=JPEG;ENCODING=b:" + base64Data + "\n";
+            vcard += "EMAIL;INTERNET:" + email + "\n";
+            vcard += "TEL;CELL:" + phone + "\n";
+            vcard += "TEL;CELL:" + phone2 + "\n";
+            vcard += "ORG:" + company + "\n"; // add company
+            vcard += "TITLE:" + position + "\n"; // add position
+            vcard += "X-SOCIALPROFILE;TYPE=facebook:" + fbLink + "\n"; // add Facebook link
+            vcard += "X-SOCIALPROFILE;TYPE=twitter:" + twitterLink + "\n"; // add twitter link
+            vcard += "X-SOCIALPROFILE;TYPE=instagram:" + instaLink + "\n"; // add Instagram link
+            vcard += "X-SOCIALPROFILE;TYPE=linkedin:" + linkedinLink + "\n"; // add LinkedIn link
+            vcard += "URL:" + website + "\n";
+            vcard += "ADR;WORK:" + address + "\n";
+               vcard += "NOTE:" + note + "\n"; // add note
+            vcard += "END:VCARD";
+
+            // Download the VCard file
+            var blob = new Blob([vcard], {
+              type: "text/x-vcard;charset=utf-8",
+            });
+            var link = document.createElement("a");
+            link.download = fullName + ".vcf";
+            link.href = window.URL.createObjectURL(blob);
+            link.click();
+          })
+          .catch((error) => {
+            console.error("Error fetching image:", error);
+          });
+      }
+    </script>
+
+    <script></script>
+
+    <!-- <script>
+          var btn = document.getElementById('addtocontact');
+          btn.addEventListener(“click”, loadvcard);
+          function loadvcard(){
+          var data = "BEGIN%3AVCARD%0AVERSION%3A3.0%0AN%3ADoe%3BJohn%0AFN%3AJohn%20Doe%0ATITLE%3A08002221111%0AORG%3AStackflowover%0AEMAIL%3BTYPE%3DINTERNET%3Ajohndoe%40gmail.com%0AEND%3AVCARD";
+          window.open("data:text/x-vcard;urlencoded," + data);
+      }
+    </script> -->
+
+    <!--The Code Starts from below for vcard (From Abrar)-->
+
+    <!-- <script>
+      function getId(r) {
+        var value = $(r).data("value");
+        location.hash = "user-" + value;
+        console.log(
+          firstname,
+          lastname,
+          email,
+          company,
+          mobile,
+          position,
+          location
+        );
+        var dcompany = $(r).data("company");
+        var demail = $(r).data("email");
+        var dfname = $(r).data("fname");
+        var dlname = $(r).data("lname");
+        var dmobile = $(r).data("mobile");
+        var dposition = $(r).data("position");
+        var dlocation = $(r).data("location");
+
+        alert(
+          value,
+          dcompany,
+          demail,
+          dfname,
+          dlname,
+          dmobile,
+          dposition,
+          dlocation
+        );
+      }
+    </script> -->
+    <!-- <script>
+      document
+        .getElementById("addtocontact")
+        .addEventListener("click", () => shareVcard());
+      function shareVcard() {
+        fetch("contact.vcf")
+          .then(function (response) {
+            return response.text();
+          })
+          .then(function (text) {
+            var file = new File([text], "contact.vcf", { type: "text/vcard" });
+            var filesArray = [file];
+            var shareData = { files: filesArray };
+
+            if (navigator.canShare && navigator.canShare(shareData)) {
+              // Adding title afterwards as navigator.canShare just
+              // takes files as input
+              shareData.title = "vcard";
+              navigator
+                .share(shareData)
+                .then(() => console.log("Share was successful."))
+                .catch((error) => console.log("Sharing failed", error));
+            } else {
+              console.log("Your system doesn't support sharing files.");
+            }
+          });
+      }
+    </script> -->
+  </body>
+</html>

@@ -1,0 +1,128 @@
+<html>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE-Edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+         <title>NFC Firebase data</title>
+         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    </head>
+    <body>
+        
+       
+        <div class="container mt-3">
+             <h1>NFC USERS FIREBASE DATA</h1>
+              <table class="table table-dark">
+                  <thead>
+                      <th>No.</th>
+                      <th>Co. Name</th>
+                      <th>Email</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>Mobile</th>
+                      <th>Position</th>
+                      <th>Location</th>
+                  </thead>
+                  <tbody id="tbody1"></tbody>
+              </table>
+    
+        </div>
+        
+        
+        <script type="module">
+        var stdNo = 0;
+        var tbody = document.getElementById('tbody1');
+        
+            function AddItemToTable(cname,email,fname,lname,mobile,position,location){
+                let trow = document.createElement("tr");
+                let td1 = document.createElement('td');
+                let td2 = document.createElement('td');
+                let td3 = document.createElement('td');
+                let td4 = document.createElement('td');
+                let td5 = document.createElement('td');
+                let td6 = document.createElement('td');
+                let td7 = document.createElement('td');
+                let td8 = document.createElement('td');
+                
+                td1.innerHTML= ++stdNo;
+                td2.innerHTML= cname;
+                td3.innerHTML= email;
+                td4.innerHTML= fname;
+                td5.innerHTML= lname;
+                td6.innerHTML= mobile;
+                td7.innerHTML= position;
+                td8.innerHTML= location;
+                
+                trow.appendChild(td1);
+                trow.appendChild(td2);
+                trow.appendChild(td3)
+                trow.appendChild(td4);
+                trow.appendChild(td5);
+                trow.appendChild(td6);
+                trow.appendChild(td7);
+                trow.appendChild(td8);
+                
+                tbody.appendChild(trow);
+            }
+            
+            function AddAllItemsToTable(TheStudent){
+                stdNo=0;
+                tbody.innerHTML="";
+                TheStudent.forEach(element => {
+                    AddItemToTable(element.comName, element.emailCom, element.fName, element.lName, element.mobile, element.position, element.location);
+                });
+                
+            }
+            
+            
+                             // Import the functions you need from the SDKs you need
+                 // import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+                  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-analytics.js";
+                  // TODO: Add SDKs for Firebase products that you want to use
+                  // https://firebase.google.com/docs/web/setup#available-libraries
+                
+                  // Your web app's Firebase configuration
+                  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+                  const firebaseConfig = {
+                    apiKey: "AIzaSyBHE00yT5BXSSdETAyVA0OSxiih3IlODoc",
+                    authDomain: "nfcsaudi360.firebaseapp.com",
+                    databaseURL: "https://nfcsaudi360-default-rtdb.firebaseio.com",
+                    projectId: "nfcsaudi360",
+                    storageBucket: "nfcsaudi360.appspot.com",
+                    messagingSenderId: "299813653483",
+                    appId: "1:299813653483:web:b5655e9a856a4f0958a7ae",
+                    measurementId: "G-YMCEF40YMK"
+                  };
+                
+                  // Initialize Firebase
+                  const app = initializeApp(firebaseConfig);
+                  const analytics = getAnalytics(app);
+                  
+                  import{
+                      getFirestore, doc, getDoc, getDocs, onSnapshot, collection
+                  }
+                  from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+                  const db = getFirestore();
+                  
+                  
+                  // Get All Data
+                  
+                  async function GetAllDataOnce(){
+                      const querySnapshot = await getDocs(collection(db,"usersData"));
+                      
+                      var students = [];
+                      
+                      querySnapshot.forEach(doc => {
+                         students.push(doc.data()); 
+                      });
+                      
+                      AddAllItemsToTable(students);
+                  }
+                  
+                  window.onload = GetAllDataOnce;
+                  
+        </script>
+
+
+
+</body>
+</html>

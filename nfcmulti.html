@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="NFC" />
+    <meta name="keywords" content="Payment, NFC" />
+    <meta name="author" content="Saudi360" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+
+    <!-- Font awesome  -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"
+    />
+    <!-- custom style -->
+    <link rel="stylesheet" href="nfcmulti.css" />
+
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Saudi 360 Card NFC</title>
+  </head>
+  <body>
+    <div class="preloader">
+      <div
+        id="preloader_img"
+        class="h-100 d-flex justify-content-center align-items-center"
+      >
+        <img
+          class="img-fluid"
+          src="https://nfc.saudi360inc.com/preloader.gif"
+          alt="preloader"
+          width="300"
+        />
+      </div>
+    </div>
+    <section class="d-flex align-items-center justify-content-center h-100">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-xl-4 col-lg-6 col-md-8 col-sm-12">
+            <div class="card">
+              <div class="card-banner">
+                <figure> 
+                <img
+                  class="img-fluid avatar_cover"
+                  id="avatar_cover"
+                  src=""
+                  alt=""
+                />
+                </figure>
+                <a
+                  type="button"
+                  class="position-absolute top-10 start-10 z-50"
+                  data-bs-toggle="modal"
+                  data-bs-target="#qr_code"
+                >
+                  <img
+                    class="rounded"
+                    src="https://image.winudf.com/v2/image1/Y29tLmdhbW1hLnNjYW5faWNvbl8xNTc5MjAwODA1XzA2NA/icon.png?fakeurl=1&h=240&type=webp"
+                    width="30"
+                  />
+                </a>
+                <a
+                  type="button"
+                  class="position-absolute top-10 end-10 z-50 rounded-circle"
+                  data-bs-toggle="modal"
+                  data-bs-target="#share"
+                >
+                  <img
+                    class="rounded"
+                    src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrDoqlp0sYnw0T5-M4oyPJ71rs9qOVagV_aKl3bRh8_XBC6yZgPaKuW8DvJKteZIVW1dE&usqp=CAU"
+                    width="30"
+                  />
+                </a>
+              </div>
+              <div class="card-header px-4 bg-transparent">
+                <div>
+                  <img
+                    class="avatar rounded-circle img-fluid"
+                    src=""
+                    alt="avatar"
+                    id="avatar"
+                  />
+                  <h4>
+                    <span id="firstName">Katie </span 
+                    > &nbsp;<span id="lastName">INL</span>
+                  </h4>
+                  <h6 id="position">Mobile Application Developer</h6>
+                </div>
+              </div>
+              <div class="card-body px-4">
+                <div class="my-2 user_data">
+                  <div>
+                    <i class="fa fa-briefcase"></i>
+                    <a href="javascript:void(0)" id="company">Adib</a>
+                  </div>
+                  <hr />
+                  <div>
+                    <i class="fa fa-phone"></i>
+                    <a href="javascript:void(0)" id="mobile">+966591171813</a>
+                  </div>
+                  <hr />
+                  <div>
+                    <i class="fa fa-envelope"></i>
+                    <a href="javascript:void(0)" id="email"
+                      >ibrahim@gmail.com</a
+                    >
+                  </div>
+                  <hr />
+                  <div>
+                    <i class="fa fa-globe"></i>
+                    <a target="_blank" href="javascript:void(0)" id="website"
+                      >saudi360inc.com</a
+                    >
+                  </div>
+                  <hr />
+                  <div>
+                    <i class="fa fa-map-marker"></i>
+                    <a id="location">Rayadh , Saudi Arabia</a>
+                  </div>
+                  <hr />
+                </div>
+              </div>
+              <div class="add-contact-btn">
+                <button
+                  onclick="saveCard()"
+                  class="add_to_contact_button cursor-pointer"
+                  id="addtocontact"
+                >
+                  ADD TO CONTACT
+                </button>
+              </div>
+              <!-- <h6 class="text-center mt-2">Connect with me on</h6> -->
+              <div class="middle my-2">
+                <a class="btn" id="facebook" href="#">
+                  <i class="fa fa-facebook-f"></i>
+                </a>
+                <a class="btn" id="twitter" href="#">
+                  <i class="fa fa-twitter"></i>
+                </a>
+
+                <a class="btn" id="insta" href="#">
+                  <i class="fa fa-instagram"></i>
+                </a>
+                <a class="btn" id="linkedIn" href="#">
+                  <i class="fa fa-linkedin"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          <h6 class="text-center mt-2">
+            <span class="text-white">Powered by</span>
+            <a
+              class="text-light"
+              href="https://saudi360inc.com/"
+              target="_blank"
+              >saudi360inc.com</a
+            >
+          </h6>
+        </div>
+      </div>
+    </section>
+
+    <!-- Modal QR-code-->
+    <div
+      class="modal fade"
+      id="qr_code"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+            <div class="d-flex justify-content-center">
+              <div id="qrcode"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Share-->
+    <div
+      class="modal fade"
+      id="share"
+      tabindex="-1"
+      aria-labelledby="exampleModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+            <div
+              class="text-center d-flex flex-column justify-content-center align-items-center gap-4"
+            >
+              <!--<div>-->
+              <!--  <img-->
+              <!--    id="qrcode_model"-->
+              <!--    class="img-fluid qrcode"-->
+              <!--    src=""-->
+              <!--    width="150"-->
+              <!--  />-->
+              <!--</div>-->
+              <!--<p>Point your camera at the QR code, or visit</p>-->
+            </div>
+            <div>
+              <!--<p class="text-white text-wrap" id="website_url" href=""></p>-->
+            </div>
+            <section class="model_share">
+              <div class="menu">
+                <input
+                  type="checkbox"
+                  href="#"
+                  class="menu-open"
+                  name="menu-open"
+                  id="menu-open"
+                />
+                <label class="menu-open-button" for="menu-open">
+                  <i class="fa fa-share-alt share-icon"></i>
+                </label>
+                <a
+                  style="display: none"
+                >
+                  <i class="fa fa-facebook"></i>
+                </a>
+                <a
+                  style="display: none"
+                >
+                  <i class="fa fa-twitter"></i>
+                </a>
+                <a
+                  href="https://www.pinterest.com"
+                  target="_blank"
+                  class="menu-item pinterest_share_btn"
+                >
+                  <i class="fa fa-envelope"></i>
+                </a>
+                <a
+                  href="https://www.youtube.com"
+                  target="_blank"
+                  class="menu-item youtube_share_btn"
+                >
+                  <i class="fa fa-whatsapp"></i>
+                </a>
+                <a href="" id="facebook_share_btn" target="_blank" class="menu-item facebook_share_btn">
+                  <i class="fa fa-facebook"></i>
+                </a>
+                <a
+                  style="display: none"
+                >
+                  <i class="fa fa-google-plus"></i>
+                </a>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Waqar Code for QR-Code Generation of Current URL  -->
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
+    <script>
+      currentURL = window.location.href;
+      const qrcode = new QRCode(document.getElementById("qrcode"), {
+        text: currentURL,
+        width: 90,
+        height: 90,
+        colorDark: "#000",
+        colorLight: "#fff",
+        correctLevel: QRCode.CorrectLevel.H,
+      });
+
+      //   $(document).ready(function () {
+      //     // QR-Code of Model
+      //     var qrcode_model = document.querySelectorAll("#qrcode img")[0].src;
+      //     document.getElementById("qrcode_model").src = qrcode_model;
+      //   });
+    </script>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
+      const firebaseConfig = {
+        apiKey: "AIzaSyAlrQqmaMMuXy5SeJA4GeWYtEn5QI-XBAg",
+        authDomain: "nfcmultipleadmin.firebaseapp.com",
+        projectId: "nfcmultipleadmin",
+        storageBucket: "nfcmultipleadmin.appspot.com",
+        messagingSenderId: "732053928970",
+        appId: "1:732053928970:web:badb16e7ffc1f23ca2f3f3",
+        measurementId: "G-86XNPZPFZW",
+      };
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        getDocs,
+        where,
+        query,
+        onSnapshot,
+        collection,
+      } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-firestore.js";
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore();
+
+      let searchParams = new URLSearchParams(window.location.search);
+      let CollectionID = searchParams.get("Cid");
+      let DocumentID = searchParams.get("Docid");
+      let UserID = searchParams.get("Uid");
+
+      const filterData = query(
+        collection(db, CollectionID),
+        where("userID", "==", UserID)
+      );
+      const querySnapshot = await getDocs(filterData);
+      var data;
+      querySnapshot.forEach((doc) => {
+        data = doc.data();
+      });
+
+      console.log(data);
+      $("#firstName").html(data.fName);
+      $("#lastName").html(data.lName);
+      $("#position").html(data.position);
+      $("#company").html(data.comName);
+      $("#mobile").html(data.mobile);
+      document.getElementById("mobile").href = "tel:" + mobile;
+      $("#email").html(data.emailCom);
+      document.getElementById("email").href = "mailto:" + data.emailCom;
+      $("#website").html(data.websiteLink);
+      $("#location").html(data.location);
+      $("#avatar").attr("src", data.profileImage);
+      $("#avatar_cover").attr("src", data.image);
+      $("#telephone").html(data.telephone);
+
+      if (data.fb == "") {
+        $("#facebook").addClass("d-none");
+      } else {
+        document.getElementById("facebook").href = data.fb;
+        document.getElementById("facebook_share_btn").href = data.fb;
+      }
+      if (data.twitter == "") {
+        $("#twitter").addClass("d-none");
+      } else {
+        document.getElementById("twitter").href = data.twitter;
+        // document.getElementById("twitter_share_btn").href = data.twitter;
+      }
+      if (data.linkedIn == "") {
+        $("#linkedIn").addClass("d-none");
+      } else {
+        document.getElementById("linkedIn").href = data.linkedIn;
+        // document.getElementById("linkedIn_share_btn").href = data.linkedIn;
+      }
+      if (data.insta == "") {
+        $("#insta").addClass("d-none");
+      } else {
+        document.getElementById("insta").href = data.insta;
+        // document.getElementById("insta_share_btn").href = data.insta;
+      }
+
+      //   var website_url = $("#website_url").html(window.location.href);
+      // its to get all from from DB
+      // const querySnapshot = await getDocs(collection(db, "4Xvvb3wxVlT8uRR9AIWnqJD2y8R2"));
+      // querySnapshot.forEach((doc) => {
+      //   if (doc.exists) {
+      //     console.log(doc.data());
+      //   } else {
+      //     console.log("No such document!");
+      //   }
+      // });
+      $(".preloader").addClass("d-none");
+      $(".card").removeClass("d-none");
+    </script>
+    <script>
+      function saveCard() {
+        var firstName = $("#firstName").text();
+        var lastName = $("#lastName").text();
+        var email = $("#Demail").text();
+        var phone = $("#mobile").text();
+        var phone2 = $("#telephone").text();
+        var website = $("#website").text();
+        var address = $("#location").text();
+        var company = $("#company").text();
+        var position = $("#position").text();
+        var avatar_url = document.querySelectorAll("#avatar")[0].src;
+        var twitterLink = $("#twitter").text();
+        var fbLink = $("#fb").attr("href");
+        var instaLink = $("#insta").attr("href");
+        var linkedinLink = $("#linkedIn").attr("href");
+
+        // fetch("https://nfc.saudi360inc.com/avatar.jpg")    static avatar url
+        fetch(avatar_url)
+          .then((response) => response.arrayBuffer())
+          .then((buffer) => {
+            const base64Data = btoa(
+              String.fromCharCode(...new Uint8Array(buffer))
+            );
+            // console.log("Sucess:", `${base64Data}`);
+
+            // Build the VCard text
+            var vcard = "BEGIN:VCARD\n";
+            vcard += "VERSION:2.1\n";
+            vcard += "N:" + lastName + ";" + firstName + ";;;\n"; // separate the first name and last name with a semicolon
+            vcard += "PHOTO;TYPE=JPEG;ENCODING=b:" + base64Data + "\n";
+            vcard += "EMAIL;INTERNET:" + email + "\n";
+            vcard += "TEL;CELL:" + phone + "\n";
+            vcard += "TEL;CELL:" + phone2 + "\n";
+            vcard += "ORG:" + company + "\n"; // add company
+            vcard += "TITLE:" + position + "\n"; // add position
+            vcard += "X-SOCIALPROFILE;TYPE=facebook:" + fbLink + "\n"; // add Facebook link
+            vcard += "X-SOCIALPROFILE;TYPE=twitter:" + twitterLink + "\n"; // add twitter link
+            vcard += "X-SOCIALPROFILE;TYPE=instagram:" + instaLink + "\n"; // add Instagram link
+            vcard += "X-SOCIALPROFILE;TYPE=linkedin:" + linkedinLink + "\n"; // add LinkedIn link
+            vcard += "URL:" + website + "\n";
+            vcard += "ADR;WORK:" + address + "\n";
+            vcard += "END:VCARD";
+
+            // Download the VCard file
+            var blob = new Blob([vcard], {
+              type: "text/x-vcard;charset=utf-8",
+            });
+            var link = document.createElement("a");
+            link.download = firstName + ".vcf";
+            link.href = window.URL.createObjectURL(blob);
+            link.click();
+          })
+          .catch((error) => {
+            console.error("Error fetching image:", error);
+             fetch("https://nfc.saudi360inc.com/avatar.jpg")
+          .then((response) => response.arrayBuffer())
+          .then((buffer) => {
+            const base64Data = btoa(
+              String.fromCharCode(...new Uint8Array(buffer))
+            );
+            // console.log("Sucess:", `${base64Data}`);
+
+            // Build the VCard text
+            var vcard = "BEGIN:VCARD\n";
+            vcard += "VERSION:2.1\n";
+            vcard += "N:" + lastName + ";" + firstName + ";;;\n"; // separate the first name and last name with a semicolon
+            vcard += "PHOTO;TYPE=JPEG;ENCODING=b:" + base64Data + "\n";
+            vcard += "EMAIL;INTERNET:" + email + "\n";
+            vcard += "TEL;CELL:" + phone + "\n";
+            vcard += "TEL;CELL:" + phone2 + "\n";
+            vcard += "ORG:" + company + "\n"; // add company
+            vcard += "TITLE:" + position + "\n"; // add position
+            vcard += "X-SOCIALPROFILE;TYPE=facebook:" + fbLink + "\n"; // add Facebook link
+            vcard += "X-SOCIALPROFILE;TYPE=twitter:" + twitterLink + "\n"; // add twitter link
+            vcard += "X-SOCIALPROFILE;TYPE=instagram:" + instaLink + "\n"; // add Instagram link
+            vcard += "X-SOCIALPROFILE;TYPE=linkedin:" + linkedinLink + "\n"; // add LinkedIn link
+            vcard += "URL:" + website + "\n";
+            vcard += "ADR;WORK:" + address + "\n";
+            vcard += "END:VCARD";
+
+            // Download the VCard file
+            var blob = new Blob([vcard], {
+              type: "text/x-vcard;charset=utf-8",
+            });
+            var link = document.createElement("a");
+            link.download = firstName + ".vcf";
+            link.href = window.URL.createObjectURL(blob);
+            link.click();
+          })
+          });
+      }
+    </script>
+  </body>
+</html>
